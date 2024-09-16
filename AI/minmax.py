@@ -17,31 +17,24 @@ class MinimaxAI:
             print("No valid moves found.")
             return None
 
-        # Evaluate each move and stop at a winning or defensive move
         for row, col in possible_moves:
-            # Nếu AI có thể thắng, chọn ngay lập tức
             if self.rules.check_winner(board, row, col, self.player):
-                return row, col  # Chọn nước thắng
-
-            # Nếu đối thủ có thể thắng, chặn nước đó
+                return row, col
             if self.rules.check_winner(board, row, col, self.opponent):
-                return row, col  # Block the opponent's winning move
+                return row, col
 
-            # Place the move and evaluate its score
             board.place_move(row, col, self.player)
-            score = self.evaluate_strategic_move(board, row, col)  # Call the enhanced evaluation function
+            score = self.evaluate_strategic_move(board, row, col)
             board.undo_move(row, col)
 
             if score > best_score:
                 best_score = score
                 best_move = (row, col)
 
-        # Append the best move to AI's moves and return
         self.ai_moves.append(best_move)
         return best_move
 
     def get_first_move(self, board):
-        # Chọn vị trí giữa hoặc xung quanh vị trí giữa bàn cờ
         center_row, center_col = board.rows // 2, board.cols // 2
         candidates = [(center_row, center_col),
                       (center_row - 1, center_col - 1),
@@ -49,30 +42,53 @@ class MinimaxAI:
                       (center_row + 1, center_col - 1),
                       (center_row + 1, center_col + 1)]
 
-        # Tìm vị trí trống gần giữa bàn cờ
         for row, col in candidates:
             if board.is_empty(row, col):
                 return row, col
 
-        # Nếu tất cả đều bị chiếm, trả về một nước đi trống khác
         return self.get_possible_moves(board)[0]
 
     def evaluate_strategic_move(self, board, row, col):
         score = 0
 
-        # Check if the move can lead to a win or block a win
+        # Strongly prefer winning moves
         if self.rules.check_winner(board, row, col, self.player):
-            return 1000  # Strongly prefer winning moves
-        elif self.rules.check_winner(board, row, col, self.opponent):
-            return 900  # Block opponent's winning moves
+            return 800
+
+        # Block opponent's winning moves
+        if self.rules.check_winner(board, row, col, self.opponent):
+            return 1200
+
+        # Enhance recognition of double-threats (Double three, double two, etc.)
+        if self.detect_double_threat(board, row, col, self.opponent):
+            return 1000  # Prioritize blocking opponent's double threat
 
         # Offensive evaluation: How much does this move help AI's position
         score += self.evaluate_position(board, row, col, self.player)
 
         # Defensive evaluation: How much does this move weaken opponent's position
-        score += self.evaluate_position(board, row, col, self.opponent) * 0.5  # Half value for defense
+        score += self.evaluate_position(board, row, col, self.opponent) * 0.8
 
         return score
+
+    def detect_double_threat(self, board, row, col, player):
+        threat_count = 0
+        directions = [(1, 0), (0, 1), (1, 1), (1, -1)]  # right, down, diagonal-down-right, diagonal-down-left
+
+        # For each direction, check for lines of two or three for the player
+        for d_row, d_col in directions:
+            count = self.count_line(board, row, col, player, d_row, d_col)
+
+            if count == 2:  # Two-in-a-row in this direction
+                threat_count += 1
+            elif count == 3:  # Three-in-a-row in this direction
+                threat_count += 1
+
+            # If there are two separate lines (double threat), return True
+            if threat_count >= 2:
+                return True
+
+        return False
 
     def minimax(self, board, depth, is_maximizing, alpha, beta):
         if depth == self.max_depth or self.rules.is_game_over(board, self.player) or self.rules.is_game_over(board, self.opponent):

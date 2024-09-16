@@ -4,24 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="09d02428-994a-4211-8afc-6b2259bf8183" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/Caro.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/AI/hybrid_ai.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/AI/minmax.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/AI/reinforcement_learning.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/data_loader.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/game_records.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/model_weights.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/training_data.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/GUI/game_interface.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Game/board.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Game/rules.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    <list default="true" id="09d02428-994a-4211-8afc-6b2259bf8183" name="Changes" comment="1st">
+      <change afterPath="$PROJECT_DIR$/AI_2/competitive_ai.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AI/hybrid_ai.py" beforeDir="false" afterPath="$PROJECT_DIR$/AI/hybrid_ai.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AI/minmax.py" beforeDir="false" afterPath="$PROJECT_DIR$/AI/minmax.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AI/reinforcement_learning.py" beforeDir="false" afterPath="$PROJECT_DIR$/AI_2/reinforcement_learning.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data/data_loader.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data/game_records.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data/model_weights.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data/training_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data/training_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +29,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="6cfd84eb6d107d1e8181a10a14f1dd073ffdab42" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectColorInfo">{
@@ -57,11 +55,16 @@
     &quot;Python.menu.executor&quot;: &quot;Run&quot;,
     &quot;Python.minmax.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;535f79f8&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;D:/Download/GomokuAi-master&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\hnang\PycharmProjects\Caro\AI_2" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -78,6 +81,42 @@
       <option name="presentableId" value="Default" />
       <updated>1725529194802</updated>
     </task>
+    <task id="LOCAL-00001" summary="1st">
+      <option name="closed" value="true" />
+      <created>1726310097449</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1726310097449</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="1st" />
+    <option name="LAST_COMMIT_MESSAGE" value="1st" />
   </component>
 </project>

@@ -1,10 +1,10 @@
+from AI_2.competitive_ai import CompetitiveAI
 from AI.hybrid_ai import HybridAI
-from AI.reinforcement_learning import ReinforcementLearning
+from AI_2.reinforcement_learning import ReinforcementLearning
 from Data.training_data import TrainingData
 from GUI.game_interface import GameInterface
 from Game.board import Board
 from Game.rules import Rules
-from AI.minmax import MinimaxAI
 import pygame
 
 
@@ -12,7 +12,6 @@ def main():
     pygame.init()
     game_interface = GameInterface(board_size=15)
 
-    # Display mode selection buttons inside the game interface
     game_mode = game_interface.display_mode_selection()
 
     if game_mode == "PVP":
@@ -20,13 +19,13 @@ def main():
     elif game_mode == "PVE":
         player_vs_ai(game_interface)
     elif game_mode == "EVE":
-        ai_vs_ai(game_interface)
+        ai_vs_ai_competition(game_interface)
 
 
 def player_vs_player(game_interface):
     board = Board(15, 15)
     rules = Rules()
-    training_data = TrainingData()  # Initialize training data recorder
+    training_data = TrainingData()
 
     running = True
     current_player = 1
@@ -39,14 +38,13 @@ def player_vs_player(game_interface):
             row, col = move
             if board.is_empty(row, col):
                 board.place_move(row, col, current_player)
-                training_data.add_record(board.get_board(), (row, col), current_player)  # Record player move
+                training_data.add_record(board.get_board(), (row, col), current_player)
 
                 if rules.check_winner(board, row, col, current_player):
                     game_interface.show_winner(current_player)
                     running = False
                 current_player = 3 - current_player
 
-    # After the game ends, save the game records for future RL training
     training_data.save_to_file("game_records.txt")
 
     game_interface.quit()
@@ -102,22 +100,20 @@ def player_vs_ai(game_interface):
                 print("AI could not find a valid move.")
                 running = False
 
-    # After the game ends, save the game records for future RL training
-    training_data.save_to_file("game_records.txt")
 
     game_interface.quit()
 
 
-def ai_vs_ai(game_interface):
+def ai_vs_ai_competition(game_interface):
     board = Board(15, 15)
     rules = Rules()
-    training_data = TrainingData()  # Initialize the training data recorder
 
-    rl_model_1 = train_ai_from_past_games()
-    rl_model_2 = train_ai_from_past_games()
+    # AI hiện tại (HybridAI)
+    rl_model_existing = train_ai_from_past_games()
+    ai_existing = HybridAI(1, rules, None, rl_model_existing)
 
-    ai_1 = HybridAI(1, rules, None, rl_model_1)  # AI for player 1
-    ai_2 = HybridAI(2, rules, None, rl_model_2)  # AI for player 2
+    # AI mới (CompetitiveAI)
+    ai_new = CompetitiveAI(2, rules)
 
     running = True
     current_player = 1
@@ -126,14 +122,13 @@ def ai_vs_ai(game_interface):
         game_interface.draw_board(board.get_board())
 
         if current_player == 1:
-            move = ai_1.get_move(board)
+            move = ai_existing.get_move(board)
         else:
-            move = ai_2.get_move(board)
+            move = ai_new.get_move(board)
 
         if move:
             row, col = move
             board.place_move(row, col, current_player)
-            training_data.add_record(board.get_board(), (row, col), current_player)  # Record AI move
 
             if rules.check_winner(board, row, col, current_player):
                 game_interface.show_winner(current_player)
@@ -141,21 +136,14 @@ def ai_vs_ai(game_interface):
 
             current_player = 3 - current_player
 
-    # After the game ends, save the game records for future RL training
-    training_data.save_to_file("game_records_eve.txt")
-
     game_interface.quit()
+
 
 
 def train_ai_from_past_games():
     training_data = TrainingData()
-    # Load past game records from a file
     training_data.load_from_file("game_records.txt")
-
-    # Initialize reinforcement learning model
     rl_model = ReinforcementLearning()
-
-    # Train the model with past games
     rl_model.train(training_data.get_records())
     return rl_model
 
