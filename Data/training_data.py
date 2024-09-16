@@ -9,7 +9,7 @@ class TrainingData:
         return self.records
 
     def save_to_file(self, filename):
-        with open(filename, 'w') as file:
+        with open(filename, 'a') as file:  # Open in 'append' mode
             for record in self.records:
                 file.write(f"{record}\n")
 
@@ -20,3 +20,7 @@ class TrainingData:
                     self.records.append(eval(line.strip()))
         except FileNotFoundError:
             print(f"{filename} not found. Starting with empty training data.")
+
+    def add_records(self, move_history):
+        # Thêm dữ liệu ván đấu vào training data hiện tại
+        self.records.extend(move_history)
