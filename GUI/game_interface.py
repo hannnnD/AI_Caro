@@ -2,14 +2,18 @@ import pygame
 import time  # Để thêm thời gian trễ cho chế độ AI vs AI
 
 class GameInterface:
-    def __init__(self, board_size):
+    def __init__(self, board_size, width=1280, height=720):
         pygame.init()
         self.board_size = board_size
         self.cell_size = 50
         self.width = self.board_size * self.cell_size + 200  # Thêm khoảng trống bên trái cho các nút
         self.height = self.board_size * self.cell_size
         self.screen = pygame.display.set_mode((self.width, self.height))
+        self.board_size = board_size
+        self.width = width
+        self.height = height
         pygame.display.set_caption("Cờ Caro")
+        self.screen = pygame.display.set_mode((self.width, self.height))
         self.colors = {
             "background": (255, 255, 255),
             "lines": (0, 0, 0),
@@ -117,4 +121,4 @@ class GameInterface:
 
     def delay_for_ai_vs_ai(self):
         """Thêm độ trễ cho chế độ AI vs AI"""
-        time.sleep(1)  # Thời gian chờ giữa các lượt AI
+        time.sleep(1)

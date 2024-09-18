@@ -153,7 +153,14 @@ class MinimaxAI:
         score = 0
 
         for d_row, d_col in directions:
-            score += self.evaluate_line(board, row, col, player, d_row, d_col)
+            line_score = self.evaluate_line(board, row, col, player, d_row, d_col)
+
+            # Boost defense against opponent’s three-in-a-row or two-in-a-row threats
+            if player == self.opponent:
+                if line_score >= 50:  # Adjust this threshold based on the game rules
+                    score += line_score * 1.5  # Prioritize defense by increasing score
+            else:
+                score += line_score
 
         return score
 
