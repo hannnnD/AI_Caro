@@ -4,17 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="09d02428-994a-4211-8afc-6b2259bf8183" name="Changes" comment="1st">
-      <change afterPath="$PROJECT_DIR$/AI_2/competitive_ai.py" afterDir="false" />
+    <list default="true" id="09d02428-994a-4211-8afc-6b2259bf8183" name="Changes" comment="2nd">
+      <change afterPath="$PROJECT_DIR$/Caro_3x3_ML/learning_ai.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Caro_3x3_ML/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Caro_3x3_ML/rules_3x3.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Caro_3x3_ML/training_data_3x3.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AI/hybrid_ai.py" beforeDir="false" afterPath="$PROJECT_DIR$/AI/hybrid_ai.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AI/minmax.py" beforeDir="false" afterPath="$PROJECT_DIR$/AI/minmax.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AI/reinforcement_learning.py" beforeDir="false" afterPath="$PROJECT_DIR$/AI_2/reinforcement_learning.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/data_loader.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/game_records.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/model_weights.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/training_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data/training_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GUI/game_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUI/game_interface.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +33,18 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;hannnnD&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/hannnnD/AI_Caro.git&quot;,
+    &quot;accountId&quot;: &quot;50df8fa1-be3b-4a81-8ba0-c90abce50754&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
@@ -55,7 +64,7 @@
     &quot;Python.menu.executor&quot;: &quot;Run&quot;,
     &quot;Python.minmax.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;535f79f8&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;0eec0601&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;D:/Download/GomokuAi-master&quot;
   }
@@ -89,7 +98,15 @@
       <option name="project" value="LOCAL" />
       <updated>1726310097449</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="2nd">
+      <option name="closed" value="true" />
+      <created>1726486287153</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1726486287153</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -117,6 +134,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="1st" />
-    <option name="LAST_COMMIT_MESSAGE" value="1st" />
+    <MESSAGE value="2nd" />
+    <option name="LAST_COMMIT_MESSAGE" value="2nd" />
   </component>
 </project>
