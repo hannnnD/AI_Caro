@@ -1,177 +1,281 @@
-import numpy as np
 import random
-import pygame
-import sys
+from copy import deepcopy
 
-# Constants
-BOARD_SIZE = 3
 EMPTY = 0
 PLAYER_X = 1
-PLAYER_O = -1
-CELL_SIZE = 200
-LINE_WIDTH = 15
-CIRCLE_RADIUS = 60
-CIRCLE_WIDTH = 15
-CROSS_WIDTH = 25
-SCREEN_SIZE = BOARD_SIZE * CELL_SIZE
-EPSILON = 0.1
-EPSILON_DECAY = 0.995
-MIN_EPSILON = 0.01
-ALPHA = 0.2  # Learning rate for Q-learning
-GAMMA = 0.9  # Discount factor for Q-learning
+PLAYER_O = 2
+DRAW = 3
 
-# Colors
-WHITE = (255, 255, 255)
-LINE_COLOR = (23, 145, 135)
-CIRCLE_COLOR = (242, 85, 96)
-CROSS_COLOR = (28, 170, 156)
+BOARD_FORMAT = "----------------------------\n| {0} | {1} | {2} |\n|--------------------------|\n| {3} | {4} | {5} |\n|--------------------------|\n| {6} | {7} | {8} |\n----------------------------"
+NAMES = [' ', 'X', 'O']
+def printboard(state):
+    cells = []
+    for i in range(3):
+        for j in range(3):
+            cells.append(NAMES[state[i][j]].center(6))
+    print(BOARD_FORMAT.format(*cells))
 
-# Initialize pygame
-pygame.init()
-screen = pygame.display.set_mode((SCREEN_SIZE, SCREEN_SIZE))
-pygame.display.set_caption('Tic-Tac-Toe')
+def emptystate():
+    return [[EMPTY,EMPTY,EMPTY],[EMPTY,EMPTY,EMPTY],[EMPTY,EMPTY,EMPTY]]
 
-# Initialize font
-font = pygame.font.Font(None, 74)
+def gameover(state):
+    for i in range(3):
+        if state[i][0] != EMPTY and state[i][0] == state[i][1] and state[i][0] == state[i][2]:
+            return state[i][0]
+        if state[0][i] != EMPTY and state[0][i] == state[1][i] and state[0][i] == state[2][i]:
+            return state[0][i]
+    if state[0][0] != EMPTY and state[0][0] == state[1][1] and state[0][0] == state[2][2]:
+        return state[0][0]
+    if state[0][2] != EMPTY and state[0][2] == state[1][1] and state[0][2] == state[2][0]:
+        return state[0][2]
+    for i in range(3):
+        for j in range(3):
+            if state[i][j] == EMPTY:
+                return EMPTY
+    return DRAW
 
-# Draw the game grid
-def draw_grid():
-    screen.fill(WHITE)
-    for x in range(1, BOARD_SIZE):
-        pygame.draw.line(screen, LINE_COLOR, (0, x * CELL_SIZE), (SCREEN_SIZE, x * CELL_SIZE), LINE_WIDTH)
-        pygame.draw.line(screen, LINE_COLOR, (x * CELL_SIZE, 0), (x * CELL_SIZE, SCREEN_SIZE), LINE_WIDTH)
+def last_to_act(state):
+    countx = 0
+    counto = 0
+    for i in range(3):
+        for j in range(3):
+            if state[i][j] == PLAYER_X:
+                countx += 1
+            elif state[i][j] == PLAYER_O:
+                counto += 1
+    if countx == counto:
+        return PLAYER_O
+    if countx == (counto + 1):
+        return PLAYER_X
+    return -1
 
-# Draw the X or O marks on the board
-def draw_marks(board):
-    for row in range(BOARD_SIZE):
-        for col in range(BOARD_SIZE):
-            if board[row][col] == PLAYER_X:
-                draw_cross(row, col)
-            elif board[row][col] == PLAYER_O:
-                draw_circle(row, col)
 
-# Draw X mark
-def draw_cross(row, col):
-    start_desc = (col * CELL_SIZE + CELL_SIZE // 4, row * CELL_SIZE + CELL_SIZE // 4)
-    end_desc = (col * CELL_SIZE + 3 * CELL_SIZE // 4, row * CELL_SIZE + 3 * CELL_SIZE // 4)
-    start_asc = (col * CELL_SIZE + CELL_SIZE // 4, row * CELL_SIZE + 3 * CELL_SIZE // 4)
-    end_asc = (col * CELL_SIZE + 3 * CELL_SIZE // 4, row * CELL_SIZE + CELL_SIZE // 4)
-    pygame.draw.line(screen, CROSS_COLOR, start_desc, end_desc, CROSS_WIDTH)
-    pygame.draw.line(screen, CROSS_COLOR, start_asc, end_asc, CROSS_WIDTH)
-
-# Draw O mark
-def draw_circle(row, col):
-    pygame.draw.circle(screen, CIRCLE_COLOR, (col * CELL_SIZE + CELL_SIZE // 2, row * CELL_SIZE + CELL_SIZE // 2), CIRCLE_RADIUS, CIRCLE_WIDTH)
-
-# Get row and column from mouse click position
-def get_click_pos(pos):
-    return pos[1] // CELL_SIZE, pos[0] // CELL_SIZE
-
-def initialize_board():
-    return np.zeros((BOARD_SIZE, BOARD_SIZE), dtype=int)
-
-# Check for winner
-def check_winner(board):
-    for i in range(BOARD_SIZE):
-        # Check rows and columns
-        if abs(np.sum(board[i, :])) == BOARD_SIZE:
-            return np.sign(np.sum(board[i, :]))
-        if abs(np.sum(board[:, i])) == BOARD_SIZE:
-            return np.sign(np.sum(board[:, i]))
-    # Check diagonals
-    diag1 = np.sum([board[i, i] for i in range(BOARD_SIZE)])
-    diag2 = np.sum([board[i, BOARD_SIZE - 1 - i] for i in range(BOARD_SIZE)])
-    if abs(diag1) == BOARD_SIZE:
-        return np.sign(diag1)
-    if abs(diag2) == BOARD_SIZE:
-        return np.sign(diag2)
-    # Check for draw
-    if not np.any(board == EMPTY):
-        return 0
-    return None
-
-# Get possible actions (empty positions)
-def get_available_actions(board):
-    return [(i, j) for i in range(BOARD_SIZE) for j in range(BOARD_SIZE) if board[i, j] == EMPTY]
-
-# Take an action
-def take_action(board, action, player):
-    board[action] = player
-    return board
-
-# Q-learning update function
-def q_update(q_table, state, action, reward, next_state, done):
-    state_key = tuple(state.flatten())
-    next_state_key = tuple(next_state.flatten())
-    if state_key not in q_table:
-        q_table[state_key] = {a: 0 for a in get_available_actions(state)}
-    if next_state_key not in q_table:
-        q_table[next_state_key] = {a: 0 for a in get_available_actions(next_state)}
-    max_next_q = max(q_table[next_state_key].values(), default=0)
-    if done:
-        q_table[state_key][action] = reward
+def enumstates(state, idx, agent):
+    if idx > 8:
+        player = last_to_act(state)
+        if player == agent.player:
+            agent.add(state)
     else:
-        q_table[state_key][action] += ALPHA * (reward + GAMMA * max_next_q - q_table[state_key][action])
+        winner = gameover(state)
+        if winner != EMPTY:
+            return
+        i = int(idx / 3)
+        j = int(idx % 3)
+        for val in range(3):
+            state[i][j] = val
+            enumstates(state, idx+1, agent)
 
-# AI chọn hành động
-def choose_action(q_table, state, available_actions, epsilon):
-    state_key = tuple(state.flatten())
-    if random.uniform(0, 1) < epsilon:
-        return random.choice(available_actions)  # Exploration
-    if state_key in q_table:
-        q_values = q_table[state_key]
-        return max(q_values, key=q_values.get)
-    return random.choice(available_actions)
+class Agent(object):
+    def __init__(self, player, verbose = False, lossval = 0, learning = True):
+        self.values = {}
+        self.player = player
+        self.verbose = verbose
+        self.lossval = lossval
+        self.learning = learning
+        self.epsilon = 0.1
+        self.alpha = 0.99
+        self.prevstate = None
+        self.prevscore = 0
+        self.count = 0
+        enumstates(emptystate(), 0, self)
 
-# Train AI
-def train_q_learning(episodes=5000, epsilon=EPSILON, epsilon_decay=EPSILON_DECAY, min_epsilon=MIN_EPSILON):
-    q_table = {}
-    for episode in range(episodes):
-        state = initialize_board()
-        done = False
-        player = PLAYER_X
-        while not done:
-            available_actions = get_available_actions(state)
-            action = choose_action(q_table, state, available_actions, epsilon)
-            next_state = take_action(state.copy(), action, player)
-            winner = check_winner(next_state)
-            reward = 1 if winner == player else 0.7 if winner == 0 else -1
-            done = winner is not None
-            q_update(q_table, state, action, reward, next_state, done)
-            state = next_state
-            player = PLAYER_O if player == PLAYER_X else PLAYER_X
-        epsilon = max(min_epsilon, epsilon * epsilon_decay)
-    return q_table
+    def episode_over(self, winner):
+        self.backup(self.winnerval(winner))
+        self.prevstate = None
+        self.prevscore = 0
 
-# Play game
-def play_game(q_table):
-    board = initialize_board()
-    done = False
-    player = PLAYER_X
-    while not done:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN and player == PLAYER_X:
-                row, col = get_click_pos(pygame.mouse.get_pos())
-                if board[row][col] == EMPTY:
-                    board[row][col] = PLAYER_X
-                    winner = check_winner(board)
-                    done = winner is not None
-                    player = PLAYER_O
-        if player == PLAYER_O and not done:
-            available_actions = get_available_actions(board)
-            state_key = tuple(board.flatten())
-            action = max(q_table.get(state_key, {}), key=q_table[state_key].get, default=random.choice(available_actions))
-            board[action[0], action[1]] = PLAYER_O
-            winner = check_winner(board)
-            done = winner is not None
-            player = PLAYER_X
-        draw_grid()
-        draw_marks(board)
-        pygame.display.update()
+    def action(self, state):
+        r = random.random()
+        if r < self.epsilon:
+            move = self.random(state)
+            self.log('>>>>>>> Exploratory action: ' + str(move))
+        else:
+            move = self.greedy(state)
+            self.log('>>>>>>> Best action: ' + str(move))
+        state[move[0]][move[1]] = self.player
+        self.prevstate = self.statetuple(state)
+        self.prevscore = self.lookup(state)
+        state[move[0]][move[1]] = EMPTY
+        return move
 
-# Train AI and play the game
-q_table = train_q_learning()
-play_game(q_table)
+    def random(self, state):
+        available = []
+        for i in range(3):
+            for j in range(3):
+                if state[i][j] == EMPTY:
+                    available.append((i,j))
+        return random.choice(available)
+
+    def greedy(self, state):
+        maxval = -50000
+        maxmove = None
+        if self.verbose:
+            cells = []
+        for i in range(3):
+            for j in range(3):
+                if state[i][j] == EMPTY:
+                    state[i][j] = self.player
+                    val = self.lookup(state)
+                    state[i][j] = EMPTY
+                    if val > maxval:
+                        maxval = val
+                        maxmove = (i, j)
+                    if self.verbose:
+                        cells.append('{0:.3f}'.format(val).center(6))
+                elif self.verbose:
+                    cells.append(NAMES[state[i][j]].center(6))
+        if self.verbose:
+            print(BOARD_FORMAT.format(*cells))
+        self.backup(maxval)
+        return maxmove
+
+    def backup(self, nextval):
+        if self.prevstate != None and self.learning:
+            self.values[self.prevstate] += self.alpha * (nextval - self.prevscore)
+
+    def lookup(self, state):
+        key = self.statetuple(state)
+        if not key in self.values:
+            self.add(key)
+        return self.values[key]
+
+    def add(self, state):
+        winner = gameover(state)
+        tup = self.statetuple(state)
+        self.values[tup] = self.winnerval(winner)
+
+    def winnerval(self, winner):
+        if winner == self.player:
+            return 1
+        elif winner == EMPTY:
+            return 0.5
+        elif winner == DRAW:
+            return 0
+        else:
+            return self.lossval
+
+    def printvalues(self):
+        vals = deepcopy(self.values)
+        for key in vals:
+            state = [list(key[0]),list(key[1]),list(key[2])]
+            cells = []
+            for i in range(3):
+                for j in range(3):
+                    if state[i][j] == EMPTY:
+                        state[i][j] = self.player
+                        cells.append(str(self.lookup(state)).center(3))
+                        state[i][j] = EMPTY
+                    else:
+                        cells.append(NAMES[state[i][j]].center(3))
+            print(BOARD_FORMAT.format(*cells))
+
+    def statetuple(self, state):
+        return (tuple(state[0]),tuple(state[1]),tuple(state[2]))
+
+    def log(self, s):
+        if self.verbose:
+            print(s)
+
+class Human(object):
+    def __init__(self, player):
+        self.player = player
+
+    def action(self, state):
+        printboard(state)
+        action = input('Your move? i.e. x,y : ')
+        return (int(action.split(',')[0]),int(action.split(',')[1]))
+
+    def episode_over(self, winner):
+        if winner == DRAW:
+            print('Game over! It was a draw.')
+        else:
+            print('Game over! Winner: Player {0}'.format(winner))
+
+def play(agent1, agent2):
+    state = emptystate()
+    for i in range(9):
+        if i % 2 == 0:
+            move = agent1.action(state)
+        else:
+            move = agent2.action(state)
+        state[move[0]][move[1]] = (i % 2) + 1
+        winner = gameover(state)
+        if winner != EMPTY:
+            return winner
+    return winner
+
+def measure_performance_vs_random(agent1, agent2):
+    epsilon1 = agent1.epsilon
+    epsilon2 = agent2.epsilon
+    agent1.epsilon = 0
+    agent2.epsilon = 0
+    agent1.learning = False
+    agent2.learning = False
+    r1 = Agent(1)
+    r2 = Agent(2)
+    r1.epsilon = 1
+    r2.epsilon = 1
+    probs = [0,0,0,0,0,0]
+    games = 100
+    for i in range(games):
+        winner = play(agent1, r2)
+        if winner == PLAYER_X:
+            probs[0] += 1.0 / games
+        elif winner == PLAYER_O:
+            probs[1] += 1.0 / games
+        else:
+            probs[2] += 1.0 / games
+    for i in range(games):
+        winner = play(r1, agent2)
+        if winner == PLAYER_O:
+            probs[3] += 1.0 / games
+        elif winner == PLAYER_X:
+            probs[4] += 1.0 / games
+        else:
+            probs[5] += 1.0 / games
+    agent1.epsilon = epsilon1
+    agent2.epsilon = epsilon2
+    agent1.learning = True
+    agent2.learning = True
+    return probs
+
+def measure_performance_vs_each_other(agent1, agent2):
+    probs = [0,0,0]
+    games = 100
+    for i in range(games):
+        winner = play(agent1, agent2)
+        if winner == PLAYER_X:
+            probs[0] += 1.0 / games
+        elif winner == PLAYER_O:
+            probs[1] += 1.0 / games
+        else:
+            probs[2] += 1.0 / games
+    return probs
+
+
+if __name__ == "__main__":
+    p1 = Agent(1, lossval = -1)
+    p2 = Agent(2, lossval = -1)
+    r1 = Agent(1, learning = False)
+    r2 = Agent(2, learning = False)
+    r1.epsilon = 1
+    r2.epsilon = 1
+    series = ['P1-Win','P1-Lose','P1-Draw','P2-Win','P2-Lose','P2-Draw']
+    markers = ['+', '.', 'o', '*', '^', 's']
+    perf = [[] for _ in range(len(series) + 1)]
+    for i in range(500):
+        if i % 10 == 0:
+            print('Game: {0}'.format(i))
+            probs = measure_performance_vs_random(p1, p2)
+            perf[0].append(i)
+            for idx,x in enumerate(probs):
+                perf[idx+1].append(x)
+        winner = play(p1,p2)
+        p1.episode_over(winner)
+        p2.episode_over(winner)
+    while True:
+        p2.verbose = True
+        p1 = Human(1)
+        winner = play(p1,p2)
+        p1.episode_over(winner)
+        p2.episode_over(winner)

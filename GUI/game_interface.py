@@ -16,9 +16,9 @@ class GameInterface:
         self.screen = pygame.display.set_mode((self.width, self.height))
         self.colors = {
             "background": (255, 255, 255),
-            "lines": (0, 0, 0),
-            "player1": (255, 0, 0),
-            "player2": (0, 0, 255)
+            "lines": (23, 145, 135),
+            "player1": (242, 85, 96),
+            "player2": (28, 170, 156)
         }
         self.font = pygame.font.Font(None, 26)
         # Vị trí và kích thước của các nút chọn chế độ
