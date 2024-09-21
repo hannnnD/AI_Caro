@@ -1,151 +1,160 @@
-from AI_2.competitive_ai import CompetitiveAI
+import pygame
+
 from AI.hybrid_ai import HybridAI
-from AI_2.reinforcement_learning import ReinforcementLearning
 from Data.training_data import TrainingData
 from GUI.game_interface import GameInterface
 from Game.board import Board
 from Game.rules import Rules
-import pygame
 
 
 def main():
     pygame.init()
     game_interface = GameInterface(board_size=15)
 
-    game_mode = game_interface.display_mode_selection()
-
-    if game_mode == "PVP":
-        player_vs_player(game_interface)
-    elif game_mode == "PVE":
-        player_vs_ai(game_interface)
-    elif game_mode == "EVE":
-        ai_vs_ai_competition(game_interface)
-
-
-def player_vs_player(game_interface):
-    board = Board(15, 15)
-    rules = Rules()
-    training_data = TrainingData()
-
-    running = True
-    current_player = 1
-
-    while running:
-        game_interface.draw_board(board.get_board())
-        running, move = game_interface.handle_events()
-
-        if move:
-            row, col = move
-            if board.is_empty(row, col):
-                board.place_move(row, col, current_player)
-                training_data.add_record(board.get_board(), (row, col), current_player)
-
-                if rules.check_winner(board, row, col, current_player):
-                    game_interface.show_winner(current_player)
-                    running = False
-                current_player = 3 - current_player
-
-    training_data.save_to_file("game_records.txt")
+    # Directly start Player vs AI mode
+    player_vs_ai(game_interface)
 
     game_interface.quit()
 
 
 def player_vs_ai(game_interface):
-    board = Board(15, 15)
+    board_size = 15
+    board = Board(board_size, board_size)
     rules = Rules()
     training_data = TrainingData()  # Initialize the training data recorder
 
-    first_player_move = None
+    # Ensure AI makes the first move in the center
+    first_player_move = (board_size // 2, board_size // 2)
+
     rl_model = train_ai_from_past_games()  # Load and train the RL model
-    ai = HybridAI(2, rules, first_player_move, rl_model)  # Use Hybrid AI (Minimax + RL)
+    ai = HybridAI(2, rules, first_player_move, rl_model)  # Hybrid AI (Minimax + RL)
+
+    current_player = 2  # Human player starts first
+    move_history = []  # To store the history of moves for Undo functionality
 
     running = True
-    current_player = 2  # AI starts first
 
     while running:
-        game_interface.draw_board(board.get_board())
-        running, move = game_interface.handle_events()
+        game_running = True
+        winner = None
 
-        if current_player == 1 and move:
-            row, col = move
-            if first_player_move is None:
-                first_player_move = (row, col)
-                ai.minimax_ai.first_player_move = first_player_move
+        while game_running:
+            game_interface.draw_board(board.get_board())
+            game_interface.display_buttons()  # Draw "Restart" and "Undo" buttons
+            game_interface.update_display()
 
-            if board.is_empty(row, col):
-                board.place_move(row, col, current_player)
-                ai.minimax_ai.player_moves.append((row, col))
-                training_data.add_record(board.get_board(), (row, col), current_player)  # Record move
-                if rules.check_winner(board, row, col, current_player):
-                    game_interface.show_winner(current_player)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    game_running = False
                     running = False
-                current_player = 2
 
-        elif current_player == 2:
-            if len(ai.minimax_ai.ai_moves) == 0:  # Check if AI is making the first move
-                move = ai.minimax_ai.get_first_move(board)  # Get the first move
-            else:
-                move = ai.get_move(board)  # Regular move for subsequent turns
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_pos = event.pos
+                    if game_interface.button_reset.collidepoint(mouse_pos):
+                        handle_restart(board, ai, move_history, training_data)
+                        break
+                    elif game_interface.button_undo.collidepoint(mouse_pos):
+                        handle_undo(board, ai, move_history, current_player, game_interface)
+                        #current_player = switch_player(current_player)
 
-            if move is not None:
-                row, col = move
-                board.place_move(row, col, current_player)
-                ai.minimax_ai.ai_moves.append((row, col))
-                training_data.add_record(board.get_board(), (row, col), current_player)  # Record AI move
-                if rules.check_winner(board, row, col, current_player):
-                    game_interface.show_winner(current_player)
-                    running = False
-                current_player = 1
-            else:
-                print("AI could not find a valid move.")
-                running = False
+                    else:
+                        if current_player == 1:
+                            move = game_interface.get_move_from_click(mouse_pos, board)
+                            if move and board.is_empty(*move):
+                                execute_player_move(move, board, move_history, training_data, current_player)
+                                if rules.check_winner(board, *move, current_player):
+                                    winner = current_player
+                                    game_running = False
+                                current_player = 2
 
+            # AI's turn
+            if game_running and current_player == 2:
+                if not move_history:  # AI's first move in the center
+                    move = first_player_move
+                else:
+                    move = ai.get_move(board)
+                if move:
+                    execute_player_move(move, board, move_history, training_data, current_player)
+                    if rules.check_winner(board, *move, current_player):
+                        winner = current_player
+                        game_running = False
+                    current_player = 1
 
-    game_interface.quit()
-
-
-def ai_vs_ai_competition(game_interface):
-    board = Board(15, 15)
-    rules = Rules()
-
-    # AI hiện tại (HybridAI)
-    rl_model_existing = train_ai_from_past_games()
-    ai_existing = HybridAI(1, rules, None, rl_model_existing)
-
-    # AI mới (CompetitiveAI)
-    ai_new = CompetitiveAI(2, rules)
-
-    running = True
-    current_player = 1
-
-    while running:
-        game_interface.draw_board(board.get_board())
-
-        if current_player == 1:
-            move = ai_existing.get_move(board)
-        else:
-            move = ai_new.get_move(board)
-
-        if move:
-            row, col = move
-            board.place_move(row, col, current_player)
-
-            if rules.check_winner(board, row, col, current_player):
-                game_interface.show_winner(current_player)
-                running = False
-
-            current_player = 3 - current_player
-
-    game_interface.quit()
-
+        # Handle end of game
+        handle_end_of_game(game_interface, winner, training_data, board, ai, move_history)
 
 
 def train_ai_from_past_games():
-    training_data = TrainingData()
-    training_data.load_from_file("game_records.txt")
-    rl_model = ReinforcementLearning()
-    rl_model.train(training_data.get_records())
-    return rl_model
+    pass
+
+
+def handle_restart(board, ai, move_history, training_data):
+    board.reset()
+    ai.reset()
+    move_history.clear()
+    training_data.clear()
+
+
+def handle_undo(board, ai, move_history, current_player, game_interface):
+    if move_history:
+        last_move = move_history.pop()
+        print(f"Undoing player's move: {last_move}")
+        board.undo_move(*last_move)
+
+        # Cập nhật giao diện sau khi undo
+        game_interface.draw_board(board.get_board())
+        game_interface.update_display()
+
+        if current_player == 2:  # AI's turn was last
+            ai_last_move = ai.undo_move()
+            if ai_last_move:
+                print(f"Undoing AI's move: {ai_last_move}")
+                board.undo_move(*ai_last_move)
+
+                # Cập nhật giao diện sau khi undo nước của AI
+                game_interface.draw_board(board.get_board())
+                game_interface.update_display()
+
+                # Sau khi AI undo, không cần chuyển ngay về người chơi mà chỉ cần đợi
+                current_player = 1  # Switch back to player
+
+        else:
+            current_player = switch_player(current_player)
+
+    # Sau khi hoàn tất undo, cập nhật lại giao diện để hiển thị thay đổi
+    game_interface.draw_board(board.get_board())
+    game_interface.update_display()
+
+def switch_player(current_player):
+    return 1 if current_player == 2 else 2
+
+
+def execute_player_move(move, board, move_history, training_data, current_player):
+    board.place_move(*move, current_player)
+    move_history.append(move)
+    print(f"Move added to history: {move}")  # Debugging
+    training_data.add_record(board.get_board(), move, current_player)
+
+
+
+def handle_end_of_game(game_interface, winner, training_data, board, ai, move_history):
+    if winner:
+        game_interface.show_winner(winner)
+    else:
+        game_interface.show_message("Game Over")
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = event.pos
+                if game_interface.button_reset.collidepoint(mouse_pos):
+                    handle_restart(board, ai, move_history, training_data)
+                    return
+        game_interface.draw_board(board.get_board())
+        game_interface.display_buttons()
+        game_interface.update_display()
 
 
 if __name__ == "__main__":

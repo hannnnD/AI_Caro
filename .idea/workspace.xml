@@ -4,15 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="09d02428-994a-4211-8afc-6b2259bf8183" name="Changes" comment="3rd">
-      <change afterPath="$PROJECT_DIR$/Caro_3x3_ML/count_the_case.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Caro_4x4_ML/main.py" afterDir="false" />
+    <list default="true" id="09d02428-994a-4211-8afc-6b2259bf8183" name="Changes" comment="4th">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Caro_3x3_ML/learning_ai.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AI/hybrid_ai.py" beforeDir="false" afterPath="$PROJECT_DIR$/AI/hybrid_ai.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AI/minmax.py" beforeDir="false" afterPath="$PROJECT_DIR$/AI/minmax.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AI_2/competitive_ai.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AI_2/reinforcement_learning.py" beforeDir="false" afterPath="$PROJECT_DIR$/AI/reinforcement_learning.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Caro_3x3_ML/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Caro_3x3_ML/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Caro_3x3_ML/rules_3x3.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Caro_3x3_ML/training_data_3x3.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Caro_4x4_ML/main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data/training_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data/training_data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GUI/game_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUI/game_interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Game/board.py" beforeDir="false" afterPath="$PROJECT_DIR$/Game/board.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,15 +70,45 @@
     "Python.menu.executor": "Run",
     "Python.minmax.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "de2f32a5",
+    "git-widget-placeholder": "613f05bd",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "D:/Download/GomokuAi-master"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\hnang\PycharmProjects\Caro\AI" />
       <recent name="C:\Users\hnang\PycharmProjects\Caro\AI_2" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Caro" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -117,7 +150,15 @@
       <option name="project" value="LOCAL" />
       <updated>1726639445346</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="4th">
+      <option name="closed" value="true" />
+      <created>1726738400102</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1726738400102</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -147,6 +188,7 @@
     <MESSAGE value="1st" />
     <MESSAGE value="2nd" />
     <MESSAGE value="3rd" />
-    <option name="LAST_COMMIT_MESSAGE" value="3rd" />
+    <MESSAGE value="4th" />
+    <option name="LAST_COMMIT_MESSAGE" value="4th" />
   </component>
 </project>
