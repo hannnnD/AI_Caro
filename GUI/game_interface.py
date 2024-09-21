@@ -1,5 +1,5 @@
 import pygame
-import time  # Để thêm thời gian trễ cho chế độ AI vs AI
+import time
 
 class GameInterface:
     def __init__(self, board_size, width=1280, height=720):
@@ -9,34 +9,28 @@ class GameInterface:
         self.width = self.board_size * self.cell_size + 200  # Thêm khoảng trống bên trái cho các nút
         self.height = self.board_size * self.cell_size
         self.screen = pygame.display.set_mode((self.width, self.height))
-        self.board_size = board_size
-        self.width = width
-        self.height = height
-        pygame.display.set_caption("Cờ Caro")
-        self.screen = pygame.display.set_mode((self.width, self.height))
         self.colors = {
-            "background": (255, 255, 255),
+            "background": (250, 250, 250),
             "lines": (23, 145, 135),
             "player1": (242, 85, 96),
             "player2": (28, 170, 156)
         }
         self.font = pygame.font.Font(None, 26)
-        # Vị trí và kích thước của các nút chọn chế độ
-        self.button_pvp = pygame.Rect(10, 50, 130, 50)
-        self.button_pve = pygame.Rect(10, 120, 130, 50)
-        self.button_eve = pygame.Rect(10, 190, 130, 50)
+        # Vị trí và kích thước của các nút
+        self.button_reset = pygame.Rect(10, 50, 130, 50)
+        self.button_undo = pygame.Rect(10, 120, 130, 50)
 
     def draw_board(self, board):
         self.screen.fill(self.colors["background"])
 
-        # Draw grid lines
+        # Vẽ các đường kẻ
         for i in range(self.board_size + 1):
             pygame.draw.line(self.screen, self.colors["lines"], (i * self.cell_size + 150, 0),
                              (i * self.cell_size + 150, self.board_size * self.cell_size))
             pygame.draw.line(self.screen, self.colors["lines"], (150, i * self.cell_size),
                              (self.width, i * self.cell_size))
 
-        # Draw X and O pieces
+        # Vẽ các quân cờ X và O
         for row in range(self.board_size):
             for col in range(self.board_size):
                 if board[row][col] == 1:  # Player 1 (X)
@@ -54,57 +48,58 @@ class GameInterface:
                                         row * self.cell_size + self.cell_size // 2),
                                        self.cell_size // 2 - 5, 5)
 
-        # Hiển thị các nút chọn chế độ bên trái của màn hình
-        self.display_mode_buttons()
-
+        self.display_buttons()
         pygame.display.flip()
 
-    def handle_events(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return False, None
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                x, y = pygame.mouse.get_pos()
-                # Kiểm tra xem người chơi có nhấn vào khu vực bàn cờ không
-                if x > 150:  # Vùng bên phải nơi bàn cờ hiển thị
-                    col = (x - 150) // self.cell_size
-                    row = y // self.cell_size
-                    return True, (row, col)
-        return True, None
+    def check_four_in_a_row(self, board, row, col, player):
+        directions = [(1, 0), (0, 1), (1, 1), (1, -1)]
+        for d_row, d_col in directions:
+            count = 1
+            for i in range(1, 4):
+                r, c = row + i * d_row, col + i * d_col
+                if 0 <= r < self.board_size and 0 <= c < self.board_size and board[r][c] == player:
+                    count += 1
+                else:
+                    break
+            for i in range(1, 4):
+                r, c = row - i * d_row, col - i * d_col
+                if 0 <= r < self.board_size and 0 <= c < self.board_size and board[r][c] == player:
+                    count += 1
+                else:
+                    break
+            if count >= 4:
+                return True
+        return False
 
-    def display_mode_selection(self):
-        running = True
-        mode = None
-        while running:
-            self.screen.fill(self.colors["background"])
-            self.display_mode_buttons()
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                    return None
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    x, y = pygame.mouse.get_pos()
-                    if self.button_pvp.collidepoint(x, y):
-                        return "PVP"
-                    elif self.button_pve.collidepoint(x, y):
-                        return "PVE"
-                    elif self.button_eve.collidepoint(x, y):
-                        return "EVE"
-            pygame.display.flip()
+    def display_buttons(self):
+        mouse_pos = pygame.mouse.get_pos()
+        mouse_click = pygame.mouse.get_pressed()
 
-    def display_mode_buttons(self):
-        # Hiển thị các nút chọn chế độ bên trái của màn hình
-        pygame.draw.rect(self.screen, (0, 255, 0), self.button_pvp)
-        pvp_text = self.font.render("PvP", True, (0, 0, 0))
-        self.screen.blit(pvp_text, (self.button_pvp.x + 5, self.button_pvp.y + 10))
+        # Button colors for different states
+        reset_color = (28, 170, 156)  # Default reset button color
+        undo_color = (242, 85, 96)  # Default undo button color
 
-        pygame.draw.rect(self.screen, (0, 255, 0), self.button_pve)
-        pve_text = self.font.render("PvE", True, (0, 0, 0))
-        self.screen.blit(pve_text, (self.button_pve.x + 5, self.button_pve.y + 10))
+        # Change color on hover for the reset button
+        if self.button_reset.collidepoint(mouse_pos):
+            reset_color = (28, 170, 156)  # Darker green on hover
+            if mouse_click[0]:  # Mouse is clicked on the reset button
+                reset_color = (28, 190, 156)  # Even darker on click
 
-        pygame.draw.rect(self.screen, (0, 255, 0), self.button_eve)
-        eve_text = self.font.render("EvE", True, (0, 0, 0))
-        self.screen.blit(eve_text, (self.button_eve.x + 5, self.button_eve.y + 10))
+        # Change color on hover for the undo button
+        if self.button_undo.collidepoint(mouse_pos):
+            undo_color = (242, 85, 96)  # Darker red on hover
+            if mouse_click[0]:  # Mouse is clicked on the undo button
+                undo_color = (222, 85, 96)  # Even darker on click
+
+        # Draw reset button
+        pygame.draw.rect(self.screen, reset_color, self.button_reset)
+        reset_text = self.font.render("Reset Game", True, (0, 0, 0))
+        self.screen.blit(reset_text, (self.button_reset.x + 5, self.button_reset.y + 10))
+
+        # Draw undo button
+        pygame.draw.rect(self.screen, undo_color, self.button_undo)
+        undo_text = self.font.render("Undo Move", True, (0, 0, 0))
+        self.screen.blit(undo_text, (self.button_undo.x + 5, self.button_undo.y + 10))
 
     def show_winner(self, winner):
         text = self.font.render(f"Player {winner} wins!", True, (0, 0, 0))
@@ -116,9 +111,21 @@ class GameInterface:
     def quit(self):
         pygame.quit()
 
-    def update(self):
+    def update_display(self):
         pygame.display.flip()
 
-    def delay_for_ai_vs_ai(self):
-        """Thêm độ trễ cho chế độ AI vs AI"""
-        time.sleep(1)
+    def show_message(self, message):
+        text = self.font.render(message, True, (0, 0, 0))
+        text_rect = text.get_rect(center=(self.width // 2 + 75, self.board_size * self.cell_size // 2))
+        self.screen.blit(text, text_rect)
+        pygame.display.flip()
+        time.sleep(3)
+
+    def get_move_from_click(self, mouse_pos, board):
+        x, y = mouse_pos
+        if x > 150 and x < self.width and y > 0 and y < self.height:
+            col = (x - 150) // self.cell_size
+            row = y // self.cell_size
+            if board.is_empty(row, col):
+                return row, col
+        return None
