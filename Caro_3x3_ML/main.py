@@ -6,7 +6,17 @@ PLAYER_X = 1
 PLAYER_O = 2
 DRAW = 3
 
-BOARD_FORMAT = "----------------------------\n| {0} | {1} | {2} |\n|--------------------------|\n| {3} | {4} | {5} |\n|--------------------------|\n| {6} | {7} | {8} |\n----------------------------"
+BOARD_FORMAT = """
+          0        1        2
+     ----------------------------
+ 0   | {0} | {1} | {2} |
+     ----------------------------
+ 1   | {3} | {4} | {5} |
+     ----------------------------
+ 2   | {6} | {7} | {8} |
+     ----------------------------
+"""
+
 NAMES = [' ', 'X', 'O']
 
 def printboard(state):
@@ -183,7 +193,7 @@ class Human(object):
 
     def action(self, state):
         printboard(state)
-        action = input('Your move? i.e. x,y : ')
+        action = input('Nước đi(row, colm): ')
         return (int(action.split(',')[0]),int(action.split(',')[1]))
 
     def episode_over(self, winner):
