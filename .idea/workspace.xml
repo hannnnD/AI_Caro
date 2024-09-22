@@ -4,9 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="09d02428-994a-4211-8afc-6b2259bf8183" name="Changes" comment="99%">
+    <list default="true" id="09d02428-994a-4211-8afc-6b2259bf8183" name="Changes" comment="123">
+      <change afterPath="$PROJECT_DIR$/Caro_3x3_ML/agent.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Caro_3x3_ML/gui.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Caro_3x3_ML/player.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Caro_3x3_ML/train.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Caro_3x3_ML/count_the_case.py" beforeDir="false" afterPath="$PROJECT_DIR$/Caro_3x3_ML/count_the_case.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Caro_3x3_ML/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Caro_3x3_ML/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,21 +55,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.board.executor&quot;: &quot;Run&quot;,
-    &quot;Python.count_the_case.executor&quot;: &quot;Run&quot;,
-    &quot;Python.game_interface.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main2.executor&quot;: &quot;Run&quot;,
-    &quot;Python.menu.executor&quot;: &quot;Run&quot;,
-    &quot;Python.minmax.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;5178be8c&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Download/GomokuAi-master&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.board.executor": "Run",
+    "Python.count_the_case.executor": "Run",
+    "Python.game_interface.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.main2.executor": "Run",
+    "Python.menu.executor": "Run",
+    "Python.minmax.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "ffcc4a27",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "D:/Download/GomokuAi-master"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\hnang\PycharmProjects\Caro\AI" />
@@ -165,7 +169,15 @@
       <option name="project" value="LOCAL" />
       <updated>1726933510256</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="123">
+      <option name="closed" value="true" />
+      <created>1727022024808</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1727022024808</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -197,6 +209,7 @@
     <MESSAGE value="3rd" />
     <MESSAGE value="4th" />
     <MESSAGE value="99%" />
-    <option name="LAST_COMMIT_MESSAGE" value="99%" />
+    <MESSAGE value="123" />
+    <option name="LAST_COMMIT_MESSAGE" value="123" />
   </component>
 </project>
