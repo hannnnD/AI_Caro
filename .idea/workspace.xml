@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="09d02428-994a-4211-8afc-6b2259bf8183" name="Changes" comment="99%">
+    <list default="true" id="09d02428-994a-4211-8afc-6b2259bf8183" name="Changes" comment="1234">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AI/minmax.py" beforeDir="false" afterPath="$PROJECT_DIR$/AI/minmax.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Caro_3x3_ML/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Caro_3x3_ML/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -61,7 +62,7 @@
     "Python.menu.executor": "Run",
     "Python.minmax.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "e1f47e17",
+    "git-widget-placeholder": "763184df",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "D:/Download/GomokuAi-master"
   }
@@ -157,7 +158,31 @@
       <option name="project" value="LOCAL" />
       <updated>1726932943484</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="99%">
+      <option name="closed" value="true" />
+      <created>1726933510256</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1726933510256</updated>
+    </task>
+    <task id="LOCAL-00007" summary="123">
+      <option name="closed" value="true" />
+      <created>1727022024808</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1727022024808</updated>
+    </task>
+    <task id="LOCAL-00008" summary="1234">
+      <option name="closed" value="true" />
+      <created>1727024251296</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1727024251296</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -189,6 +214,8 @@
     <MESSAGE value="3rd" />
     <MESSAGE value="4th" />
     <MESSAGE value="99%" />
-    <option name="LAST_COMMIT_MESSAGE" value="99%" />
+    <MESSAGE value="123" />
+    <MESSAGE value="1234" />
+    <option name="LAST_COMMIT_MESSAGE" value="1234" />
   </component>
 </project>

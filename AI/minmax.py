@@ -111,9 +111,52 @@ class MinimaxAI:
 
     def evaluate_board(self, board):
         score = 0
+        # Evaluate for the player
         score += self.evaluate_player(board, self.player)
+        # Evaluate for the opponent (with a negative score)
         score -= self.evaluate_player(board, self.opponent)
+
+        # Add center control bonus (higher weight if it's a central move)
+        score += self.evaluate_center_control(board, self.player)
+
+        # Consider mobility (number of available moves near the player's stones)
+        score += self.evaluate_mobility(board, self.player)
+
+        # Include proximity to key areas (like corners or edges for defense)
+        score += self.evaluate_key_positions(board, self.player)
+
         return score
+
+    # Central control evaluation
+    def evaluate_center_control(self, board, player):
+        center_row, center_col = board.rows // 2, board.cols // 2
+        score = 0
+        if board.get_board()[center_row][center_col] == player:
+            score += 50  # Central control bonus
+        return score
+
+    # Mobility evaluation (checks the number of possible adjacent moves)
+    def evaluate_mobility(self, board, player):
+        mobility_score = 0
+        for row in range(board.rows):
+            for col in range(board.cols):
+                if board.get_board()[row][col] == player:
+                    # Check surrounding positions for available moves
+                    for d_row, d_col in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                        r, c = row + d_row, col + d_col
+                        if 0 <= r < board.rows and 0 <= c < board.cols and board.is_empty(r, c):
+                            mobility_score += 1
+        return mobility_score
+
+    # Key positions evaluation (corners, edges for defense or offense)
+    def evaluate_key_positions(self, board, player):
+        key_score = 0
+        # Example: evaluate the corners
+        corners = [(0, 0), (0, board.cols - 1), (board.rows - 1, 0), (board.rows - 1, board.cols - 1)]
+        for row, col in corners:
+            if board.get_board()[row][col] == player:
+                key_score += 20
+        return key_score
 
     def evaluate_player(self, board, player):
         score = 0
