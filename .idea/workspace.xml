@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="09d02428-994a-4211-8afc-6b2259bf8183" name="Changes" comment="123">
-      <change afterPath="$PROJECT_DIR$/Caro_3x3_ML/agent.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Caro_3x3_ML/gui.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Caro_3x3_ML/player.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Caro_3x3_ML/train.py" afterDir="false" />
+    <list default="true" id="09d02428-994a-4211-8afc-6b2259bf8183" name="Changes" comment="1234">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AI/minmax.py" beforeDir="false" afterPath="$PROJECT_DIR$/AI/minmax.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Caro_3x3_ML/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Caro_3x3_ML/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -65,7 +62,7 @@
     "Python.menu.executor": "Run",
     "Python.minmax.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "ffcc4a27",
+    "git-widget-placeholder": "763184df",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "D:/Download/GomokuAi-master"
   }
@@ -177,7 +174,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727022024808</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="1234">
+      <option name="closed" value="true" />
+      <created>1727024251296</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1727024251296</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -210,6 +215,7 @@
     <MESSAGE value="4th" />
     <MESSAGE value="99%" />
     <MESSAGE value="123" />
-    <option name="LAST_COMMIT_MESSAGE" value="123" />
+    <MESSAGE value="1234" />
+    <option name="LAST_COMMIT_MESSAGE" value="1234" />
   </component>
 </project>

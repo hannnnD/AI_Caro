@@ -13,7 +13,7 @@ if __name__ == "__main__":
     series = ['P1-Win','P1-Lose','P1-Draw','P2-Win','P2-Lose','P2-Draw']
     markers = ['+', '.', 'o', '*', '^', 's']
     perf = [[] for _ in range(len(series) + 1)]
-    for i in range(5000):
+    for i in range(1000):
         if i % 10 == 0:
             print('Game: {0}'.format(i))
             probs = measure_performance_vs_random(p1, p2)
